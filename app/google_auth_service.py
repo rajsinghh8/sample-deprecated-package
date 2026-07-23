@@ -1,15 +1,12 @@
-from google.oauth2 import service_account
-from google.auth.transport.requests import Request
+from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
 
 def load_credentials(keyfile_path: str):
     """Load service-account credentials for calling Google APIs."""
-    return service_account.Credentials.from_service_account_file(
-        keyfile_path, scopes=SCOPES
-    )
+    return ServiceAccountCredentials.from_json_keyfile_name(keyfile_path, SCOPES)
 
 
 def is_expired(credentials) -> bool:
-    return not credentials.valid
+    return bool(credentials.access_token_expired)
